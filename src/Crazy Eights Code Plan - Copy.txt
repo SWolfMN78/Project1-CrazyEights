@@ -1,0 +1,109 @@
+Code and Steps:
+	1) Game Start
+		1a) Create cards
+			1a1) Card are composed of:
+				1a1a) Suit 
+					1a1a1) Spades (S)
+						1a1a1a) Symbol: char spade =9824 / Color: String ANSI_black = "\u001B[30m";
+					1a1a2) Hearts (H)
+						1a1a1b) char heart =9829 / Color: String ANSI_red = "\u001B[31m";
+					1a1a3) Diamonds (D)
+						1a1a1c) char diamond = 9830 / Color: String ANSI_red = "\u001B[31m";
+					1a1a4) Clubs (C)
+						1a1a1d) char club = 9827 / Color: String ANSI_black = "\u001B[30m";
+				1a1b) FaceValue and point values
+					1a1b1) Ace (A) = Points: 1
+					1a1b2) 2 = Points: 2
+					1a1b3) 3 = Points: 3
+					1a1b4) 4 = Points: 4
+					1a1b5) 5 = Points: 5
+					1a1b6) 6 = Points: 6
+					1a1b7) 7 = Points: 7
+					1a1b8) 8 = Points: 50
+					1a1b9) 9 = Points: 9
+					1a1b10) 10 = Points: 10
+					1a1b11) Jack (J) = Points: 10
+					1a1b12) Queen (Q) = Points: 10
+					1a1b13) King (K) = Points: 10
+				1a1c) A single card is then represented by the FaceValue + suit.
+					1a1c1) IE: King of hearts would be KH / Nine of Clubs would be 9C
+		1b) Create deck (52 count)
+			1b1) Deck is built from a single instance of a card.
+		1c) Confirm number of players  - Initial setting of 2 (1 player & 1 CPU)
+			1c1) Set playerScore & cpuScore to 0.
+	2) Deal Cards
+		2a) Player and CPU are delt 7 cards each.
+			2a1) Shuffle the deck of cards.
+			2a2) Player and CPU hands will be filled in exchanging order starting with Player then CPU until both hands are filled.
+			2a3) Play the top card of the deck into the discard deck. **The descardDeck will be the revealed and always show the last valid card played**
+	3) Player Turn **Cycle with CPU turn until hand or deck is empty**
+		3a) Players card will be displayed.
+		3b) Player may only play a legal card ontop of the discardDeck.
+			3b1) IE: If a KH is displayed only another K or any H may be played upon it.
+				3b1a) If the player attemps to play something that is not legal then display "Illegal card, please try again".
+				3b1b) If the player has no legal moves the player may type "Draw" to draw a card from the deck.
+					3b1b1) The card is added to the player's hand and their turn ends ** Start CPU Turn**
+						3b1b1a) If the card drawn would empty the deck then game ends **Go to Empty Hand or Deck**
+				3b1c) If the player plays a legal card then end turn.  ** Start CPU Turn **
+					3b1c1) If the card is an Eight then the player plays one additional card then turn end. ** Start CPU Turn **
+		3c) If the last card is played and would empty the players hand then game ends **Go to Empty Hand**
+	4) CPU Turn **Cycle with CPU turn until hand or deck is empty**
+		4a) Check and play
+			4a1) First check each card in the CPU's hand and if a FaceValue matches the current number in the discardDeck then play it. ** Start Player Turn **
+				4a1a) If no FaceValue matches up then play a matching suit. ** Start Player Turn **
+					4a1a1) If no matching suit then play an Eight and play the highest number of the CPU's suit hand. ** Start Player Turn **
+			4a2) If no card can be played then draw a card and end turn. ** Start Player Turn **
+				4a2a) If the card drawn would empty the deck then the game ends **Go to Empty Hand or Deck**
+		4c) End
+			4c1) If the CPU plays it last card and that card would empty the CPU's hand the game ends **Go to Empty Hand**
+	5) Empty Hand or Deck
+		5a) Upon a hand becoming empty the game ends, the points are tallied up based on the point system listed in **1a1b** and stored into
+		playerScore & cpuScore.  The values are then displayed.
+		5b) If the deck is empty then end the game and tally the points of the player and CPU hand.  The winner goes to the person with the lowest total points.
+		then run game end info.
+	6) Game End
+		6a) The program will grante the option to either play a new game, continue the current game or quit.
+			6a1) If play a new game (NG) is slected then playerScore & cpuScore are reset to 0 and the deck is reset, hands are emptied and game starts over.
+			6a2) If continue game (CG) is selected then deck is reset, hands are emptied and the game starts over.  playerScore & cpuScore will roll into the new game.
+			The starting totals for playerScore & cpuScore are now based on the last game.
+			6a3) If quit is slected then display "thank you for playing, please press any key to end."
+			
+	Required Objects & their functions:
+		oCard (Card/Cards)
+			collection of FaceValue + Suit
+		oDeck
+			Collection of cards
+		oHand(Player/CPU)
+			Collection of cards pulled from the deck.
+				CPU hand will be hidden
+				Player hand will be shown
+		oDiscard Pile
+			collection of cards from the Deck, Hand (Player, CPU, Deck)
+			The top card (always revealed) is the leading card whic players are to play to.
+		oTable - rules governer
+			Holds the hands, decks, discard piles.
+				will control having the top card of the 
+			Handles the turns
+			Handles putting a card into the hands when one is drawn.
+			Handles dealing cards to the players from the deck
+			Handles tracking when a hand is empty.
+			Keeps track of the scores
+		fTrueFalse
+			Boolean statement which will handle sending back true or false for values to be used.
+		fDraw
+			Function to handle drawing a card.
+		fIllegalCard
+			Function which will handle displaying an error based on if the user tries to use an illegal card match.
+		fDealCards
+			Function to handle dealing cards out to the player and CPU - this will remove those cards from the deck.
+				7 cards each for a 2 player game.
+				Cards will be from the top of the stack and work their way down
+				This will also call the fDraw x7 when the game starts to fill the players hands.
+		fGameOver
+			Function to handle what to do when the game is over.
+				Tally the points of the cards left in each player's hand then send it to the table to be displayed.
+		fNewGame
+			Function which will reset everything new.  - Basically restart the program from the start.
+		fContinueGame
+			Function which will tell the current game to start over while retaining the scores of the most recent game.
+	
