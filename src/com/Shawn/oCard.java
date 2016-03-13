@@ -6,5 +6,10 @@ package com.Shawn;
  * Facevalue + Suit
  */
 public class oCard {
+    oDeck.cardValue faceValue; //will set the values - Ace - 2-10 - Jack, Queen, King
+    oDeck.cardsuit suit; //will set the values later - Hearts, Diamonds, Spades, Club
 
+public String newCard(){
+    return faceValue + " of " + suit;
+}
 }
