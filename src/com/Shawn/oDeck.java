@@ -9,12 +9,21 @@ import java.util.Enumeration;
  */
 public class oDeck {
     ArrayList<oCard> cards = new ArrayList<oCard>(); //this is the intended deck we'll be pushing cards into.
-    enum cardsuit {Hearts, Spade, Clubs, Diamonds}
+    enum cardsuit {Hearts, Spades, Clubs, Diamonds}
     enum cardValue{Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King}
 
     public void createCards(){
         for(cardsuit suit: cardsuit.values()) //Walk through the first enumeration 4 times
         {
+            if (cardsuit.values().equals("Hearts")){
+                char heart =9829; //set the symbol to hearts
+            }else if (cardsuit.values().equals("Spade")){
+                char spade =9824; //set the symbol to spades
+            }else if (cardsuit.values().equals("Clubs")){
+                char club = 9827; //set the symbol to clubs
+            }else if (cardsuit.values().equals("Diamonds")){
+                char diamond = 9830; //set the symbol to dismonds
+            }
             for(cardValue face: cardValue.values()) //within the top loop run this for each value
             {
                 oCard newCard = new oCard();
