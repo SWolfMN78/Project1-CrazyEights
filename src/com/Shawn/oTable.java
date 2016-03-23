@@ -40,8 +40,8 @@ public class oTable {
 
     public void aceStartingCard(){
         //if starting card is an Eight then display for the player that they can play any card.
-        if (gameDiscard.lastCard.newCard() == "AS"){
-            System.out.println("The opening card is an ");
+        if (gameDiscard.lastCard.faceValue == oDeck.cardValue.Eight){
+            System.out.println("The opening card is an 8, you may play any card\n");
         }
     }
 
@@ -62,10 +62,11 @@ public class oTable {
         for (oCard card : playerTwoHand.hand) {
             if (isValidCardVSDiscard(card.cardCode(), gameDiscard.lastCard)){
                 playerTwoHand.hand.remove(card);
-                System.out.println("The CPU has played a card!");
+                System.out.println("The computer has played a card!\n");
                 gameDiscard.discardACard(card);
                 hasPlayedACard = true;
-                if (!card.faceValue.equals(8)){
+                if (card.faceValue != oDeck.cardValue.Eight){
+                    System.out.println("The Computer played an Eight, then played another card!");
                     isItPlayersTurn = true;
                 }
                 break;
@@ -73,6 +74,7 @@ public class oTable {
         }
         if (hasPlayedACard == false){
             drawCard(playerTwoHand);
+            System.out.println("The computer has drawn a card \n");
             isItPlayersTurn = true;
         }
     }
@@ -101,7 +103,8 @@ public class oTable {
                     oCard x = playerOneHand.getCardByCode(userInput);
                     playerOneHand.hand.remove(x);
                     gameDiscard.discardACard(x);
-                    if (!x.faceValue.equals(8)){
+                    if (x.faceValue != oDeck.cardValue.Eight){
+                        System.out.println("You played an Eight!! Play another card!");
                         isItPlayersTurn = false;
                     }
                 }else {
@@ -154,13 +157,14 @@ public class oTable {
     }
 
     public void whoWon(){
-        int handScoreOne = playerOneHand.handScore();
-        int handScoreTwo = playerTwoHand.handScore();
+        int handScoreOne = playerOneHand.handScore(); //player score
+        int handScoreTwo = playerTwoHand.handScore(); //computer score
 
         if (handScoreOne < handScoreTwo){
-            System.out.println("The player won!! Your score was: " + handScoreOne);
+            System.out.println("You won!!  Your score was: " + handScoreOne
+                    + ". The computer scored " + handScoreTwo);
         }else {
-            System.out.println("The cpu won!! With a score of: " + handScoreTwo + ". Your score was: " + handScoreOne);
+            System.out.println("You won!!  Your score was: " + handScoreTwo + ". Your score was: " + handScoreOne);
         }
     }
 }

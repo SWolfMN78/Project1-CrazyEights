@@ -14,7 +14,7 @@ public class Main {
         //Deal 7 cards to each player
         gameRules.openingHands();
         System.out.println("The starting card to play to is: " + gameRules.gameDiscard.lastCard.newCard() + "\n");
-
+        gameRules.aceStartingCard();
         //run through the player and cpu turns until hand = 0 or draw deck = 0.
         gameRules.turns();
 
