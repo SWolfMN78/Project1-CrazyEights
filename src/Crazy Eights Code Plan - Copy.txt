@@ -106,4 +106,8 @@ Code and Steps:
 			Function which will reset everything new.  - Basically restart the program from the start.
 		fContinueGame
 			Function which will tell the current game to start over while retaining the scores of the most recent game.
-	
+
+	win conditions - players hand = 0 // deck draw = 0
+	do-while players hand == false || deck draw = false
+	    players turn
+	        if player hand || deck draw would become = 0 set condition to true

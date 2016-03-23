@@ -11,8 +11,9 @@ public class oTable {
     oDeck gameDeck = new oDeck();
     oDiscardDeck gameDiscard = new oDiscardDeck();
     oHand playerOneHand = new oHand();
-    oHand playerTwoHand = new oHand();
+    oHand playerTwoHand = new oHand();//player2 = cpu
     Scanner scanner = new Scanner(System.in);
+    boolean isItPlayersTurn = true;
 
     public void gameStart(){
         //create the starting deck
@@ -34,15 +35,132 @@ public class oTable {
         }
         gameDiscard.discardACard(gameDeck.cards.get(0));//add the first card to the discard deck
         gameDeck.cards.remove(0);//remove
+        System.out.println("Hands are populated, let's begin.\n");
+    }
+
+    public void aceStartingCard(){
+        //if starting card is an Eight then display for the player that they can play any card.
+        if (gameDiscard.lastCard.newCard() == "AS"){
+            System.out.println("The opening card is an ");
+        }
     }
 
     public void turns(){
+        while (isGameOver() == false){
+            if (isItPlayersTurn == true){
+                playerTurn();
+            }else {
+                cpuTurn();
+            }
+        }
+    }
+
+    private void cpuTurn(){
+        //the cpu's turn will have functions in it that control when it's the players turn.
+        boolean hasPlayedACard = false;
+
+        for (oCard card : playerTwoHand.hand) {
+            if (isValidCardVSDiscard(card.cardCode(), gameDiscard.lastCard)){
+                playerTwoHand.hand.remove(card);
+                System.out.println("The CPU has played a card!");
+                gameDiscard.discardACard(card);
+                hasPlayedACard = true;
+                if (!card.faceValue.equals(8)){
+                    isItPlayersTurn = true;
+                }
+                break;
+            }
+        }
+        if (hasPlayedACard == false){
+            drawCard(playerTwoHand);
+            isItPlayersTurn = true;
+        }
+    }
+
+    private void playerTurn(){
         //show the top card to play to.
-        System.out.println(gameDiscard.lastCard);
+        System.out.println("The current top card to play to is " + gameDiscard.lastCard.newCard());
+
+        //Display the player hand
+        for (oCard card: playerOneHand.hand) {
+            System.out.println(card.newCard());
+        }
 
         //Ask the player for which card they wish to play
         System.out.println("It's your turn, please select a card to play by using AH for Ace of hearts or " +
                 "5S for 5 of Spades.  H = Hearts, S = Spades, C = Clubs, D = Diamonds.");
+        String userInput = scanner.nextLine();
 
+        //crate a method which will check to see if the hand has a valid card - if not allow a card draw. for now...
+        if (userInput.equalsIgnoreCase("draw")){
+            drawCard(playerOneHand);
+            isItPlayersTurn = false;
+        }else {
+            if (doesCardExistInHand(userInput, playerOneHand)){
+                if (isValidCardVSDiscard(userInput, gameDiscard.lastCard)){
+                    oCard x = playerOneHand.getCardByCode(userInput);
+                    playerOneHand.hand.remove(x);
+                    gameDiscard.discardACard(x);
+                    if (!x.faceValue.equals(8)){
+                        isItPlayersTurn = false;
+                    }
+                }else {
+                    System.out.println("Not a valid card to play, please try again.");
+                }
+            }else {
+                System.out.println("You do not have that card. Please try again.");
+            }
+        }
+    }
+
+    public boolean doesCardExistInHand (String userInput, oHand playerhand){
+        for (oCard card : playerhand.hand) {
+            if (userInput.equalsIgnoreCase(card.cardCode())){
+                return true;
+            }
+        }
+
+        return false; //place holder
+    }
+
+    public boolean isValidCardVSDiscard (String userInput, oCard lastCard){
+        //this is intended to check if the card player wants to play is valid vs the discard pile.
+        if (userInput.contains(lastCard.justFaceCode())){
+            return true;
+        }
+        if (userInput.contains(lastCard.justSuitCode())){
+            return true;
+        }
+        if (userInput.contains("8")){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isGameOver(){
+        //when this is called the game will not be over unless the following turns out true.
+        boolean gameOver = false;
+
+        if (playerTwoHand.hand.size() == 0){
+            gameOver = true;
+        }
+        if (playerOneHand.hand.size() == 0){
+            gameOver = true;
+        }
+        if (gameDeck.cards.size() == 0){
+            gameOver = true;
+        }
+        return gameOver;
+    }
+
+    public void whoWon(){
+        int handScoreOne = playerOneHand.handScore();
+        int handScoreTwo = playerTwoHand.handScore();
+
+        if (handScoreOne < handScoreTwo){
+            System.out.println("The player won!! Your score was: " + handScoreOne);
+        }else {
+            System.out.println("The cpu won!! With a score of: " + handScoreTwo + ". Your score was: " + handScoreOne);
+        }
     }
 }
