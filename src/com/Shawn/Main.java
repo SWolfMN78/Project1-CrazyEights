@@ -18,8 +18,7 @@ public class Main {
         //run through the player and cpu turns until hand = 0 or draw deck = 0.
         gameRules.turns();
 
-
-        //Give the player the option to create a new game, continue playing with a new deck or exit.
+        gameRules.whoWon();
 
     }
 }

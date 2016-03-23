@@ -89,7 +89,7 @@ public class oTable {
         //Ask the player for which card they wish to play
         System.out.println("It's your turn, please select a card to play by using AH for Ace of hearts or " +
                 "5S for 5 of Spades.  H = Hearts, S = Spades, C = Clubs, D = Diamonds.");
-        String userInput = scanner.nextLine();
+        String userInput = scanner.nextLine().toUpperCase();
 
         //crate a method which will check to see if the hand has a valid card - if not allow a card draw. for now...
         if (userInput.equalsIgnoreCase("draw")){
